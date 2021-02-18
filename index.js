@@ -7,6 +7,7 @@ const getApiKey = require("./getApiKey");
 
 const OCR_API_KEY = getApiKey();
 const SCREENSHOT_PATH = path.resolve(__dirname, "./screenshots");
+const OUTPUT_IMG_PATH = path.resolve(__dirname, "./output_images");
 const screenshots = fs.readdirSync(SCREENSHOT_PATH);
 
 if (screenshots.length > 2) {
@@ -28,11 +29,8 @@ const main = async () => {
 
   for (const sh of screenshots) {
     const inputPath = path.resolve(path.join(SCREENSHOT_PATH, sh));
-    const _driverOutput = path.resolve(
-      __dirname,
-      `./output_images/drivers_${sh}`
-    );
-    const _timesOutput = path.resolve(__dirname, `./output_images/times_${sh}`);
+    const _driverOutput = path.resolve(OUTPUT_IMG_PATH + `/drivers_${sh}`);
+    const _timesOutput = path.resolve(OUTPUT_IMG_PATH + `/times_${sh}`);
 
     // Extract driver names into new image
     await sharp(inputPath)
@@ -66,7 +64,7 @@ const main = async () => {
     const lapTimes = resTimes.ParsedResults[0].ParsedText.split("\t\r\n");
 
     const driverTimes = drivers.reduce((acc, cur, i) => {
-      if (cur.length) {
+      if (cur.length && lapTimes[i]) {
         acc[cur] = lapTimes[i];
       }
 
@@ -113,6 +111,8 @@ const main = async () => {
       return console.log(err);
     }
   });
+
+  // Empty output_images
 };
 
 main();
