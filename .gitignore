@@ -1,0 +1,6 @@
+node_modules
+/testFiles
+results.txt
+output_images/*
+!output_images/.keep
+api_key.txt

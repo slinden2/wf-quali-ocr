@@ -1,0 +1,21 @@
+{
+  "name": "wf-quali-ocr",
+  "version": "1.0.0",
+  "description": "A script that extract driver names and best lap times from a Wreckfest result screen and saves them in a .txt file.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slinden2/wf-quali-ocr.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "ocr-space-api-wrapper": "^1.0.5",
+    "sharp": "^0.27.1"
+  }
+}
