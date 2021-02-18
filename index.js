@@ -35,7 +35,7 @@ const main = async () => {
     // Extract driver names into new image
     await sharp(inputPath)
       .toColorspace("b-w")
-      .extract({ width: 300, height: 715, top: 260, left: 763 })
+      .extract({ width: 250, height: 715, top: 260, left: 763 })
       // Area for 1440p
       // .extract({ width: 400, height: 950, top: 350, left: 1012 })
       .resize({ width: 900 })
