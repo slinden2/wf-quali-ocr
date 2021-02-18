@@ -34,7 +34,7 @@ The script uses a free API ([OCR.space(https://ocr.space/)]) for the OCR part, b
 6. ???
 7. Profit
 
-Please note that the images in the `output_directory` can be removed once you have the results if you don't want to save they. They are just temp files used for the OCR.
+Please note that the images in the `output_directory` are removed automatically after the script is completed successfully. Be sure to leave the empty directory there anyway. It's is needed.
 
 Here is a gif animation that illustrates the functionality:
 ![Script functionality demonstration animation](./__docs__/wf-quali-ocr-guide.gif)

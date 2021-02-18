@@ -113,6 +113,14 @@ const main = async () => {
   });
 
   // Empty output_images
+  const outputFiles = fs.readdirSync(OUTPUT_IMG_PATH);
+  for (const f of outputFiles) {
+    try {
+      fs.unlinkSync(OUTPUT_IMG_PATH + `/${f}`);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 };
 
 main();
