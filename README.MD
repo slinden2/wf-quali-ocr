@@ -38,3 +38,20 @@ Please note that the images in the `output_directory` are removed automatically 
 
 Here is a gif animation that illustrates the functionality:
 ![Script functionality demonstration animation](./__docs__/wf-quali-ocr-guide.gif)
+
+## Building the project
+
+---
+
+**Note**
+You need to have `pkg` package installed in order for this to work. It can be installed globally by running `npm install -g pkg`.
+
+---
+
+It is possible to build an `.exe` file of the project. This is done by running `npm run build` in the script folder. Don't worry aobut the warnings prompted during the build saying `Cannot include directory %1 into executable`. These are related to the `sharp` library used for image processing. We need to include those manually by copy-pasteing everything from `X:\**\wf-quali-ocr\node_modules\sharp\build\Release` to `./build` onto the same level with the executable.
+
+You need to add also an `api_key.txt` file in the `build` folder. Without it the script will not work.
+
+Also create `screenshots` and `output_images` folders in the `build` directory. Now, if you have screenshots in the `screenshots` folder, you can run the script by double clicking `wf-quali-ocr.exe`.
+
+That `build` folder you could now move to a different PC and run it without Node or other dependencies installed. They are already bundled in the `.exe`.

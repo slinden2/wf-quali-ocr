@@ -6,9 +6,9 @@ const ocrSpace = require("ocr-space-api-wrapper");
 const getApiKey = require("./getApiKey");
 
 const OCR_API_KEY = getApiKey();
-const SCREENSHOT_PATH = path.resolve(__dirname, "./screenshots");
-const OUTPUT_IMG_PATH = path.resolve(__dirname, "./output_images");
-const screenshots = fs.readdirSync(SCREENSHOT_PATH);
+const SCREENSHOT_DIR = "screenshots";
+const OUTPUT_DIR = "output_images";
+const screenshots = fs.readdirSync(SCREENSHOT_DIR);
 
 if (screenshots.length > 2) {
   throw new Error(
@@ -28,10 +28,9 @@ const main = async () => {
   const resArray = [];
 
   for (const sh of screenshots) {
-    const inputPath = path.resolve(path.join(SCREENSHOT_PATH, sh));
-    const _driverOutput = path.resolve(OUTPUT_IMG_PATH + `/drivers_${sh}`);
-    const _timesOutput = path.resolve(OUTPUT_IMG_PATH + `/times_${sh}`);
-
+    const inputPath = path.join(SCREENSHOT_DIR, sh);
+    const _driverOutput = path.join(OUTPUT_DIR, `drivers_${sh}`);
+    const _timesOutput = path.join(OUTPUT_DIR, `times_${sh}`);
     // Extract driver names into new image
     await sharp(inputPath)
       .toColorspace("b-w")
@@ -40,7 +39,6 @@ const main = async () => {
       // .extract({ width: 400, height: 950, top: 350, left: 1012 })
       .resize({ width: 900 })
       .toFile(_driverOutput);
-
     // Extract lap times into new image
     await sharp(inputPath)
       .toColorspace("b-w")
@@ -113,14 +111,18 @@ const main = async () => {
   });
 
   // Empty output_images
-  const outputFiles = fs.readdirSync(OUTPUT_IMG_PATH);
+  const outputFiles = fs.readdirSync(OUTPUT_DIR);
   for (const f of outputFiles) {
     try {
-      fs.unlinkSync(OUTPUT_IMG_PATH + `/${f}`);
+      fs.unlinkSync(path.join(OUTPUT_DIR, f));
     } catch (err) {
       console.log(err);
     }
   }
 };
 
-main();
+if (require.main === module) {
+  main();
+}
+
+module.exports = main;

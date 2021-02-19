@@ -7,8 +7,15 @@
     "url": "https://github.com/slinden2/wf-quali-ocr.git"
   },
   "main": "index.js",
+  "bin": "bin.js",
+  "pkg": {
+    "assets": [
+      "./screenshots"
+    ]
+  },
   "scripts": {
-    "start": "node ./index.js"
+    "start": "node ./index.js",
+    "build": "pkg . --target node14-win-x64 --output ./build/wf-quali-ocr.exe"
   },
   "keywords": [],
   "author": "",
