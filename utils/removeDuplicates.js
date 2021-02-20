@@ -1,18 +1,19 @@
 const stringSimilarity = require("./stringSimilarity");
 
-const removeDuplicates = (object) => {
+const removeDuplicates = (object, discriminantProp) => {
   const driverObject = JSON.parse(JSON.stringify(object));
 
   // Remove duplicates
   const potentialDupes = [];
 
-  // Compare timeStrs between drivers to find identical ones.
+  // Compare discriminantProp (timeStr or pos) between drivers to find identical ones.
   // Returns an array of arrays of two names that have identical times
   for (const driver1 in driverObject) {
     for (const driver2 in driverObject) {
       if (driver1 === driver2) continue;
       if (
-        driverObject[driver1].timeStr === driverObject[driver2].timeStr &&
+        driverObject[driver1][discriminantProp] ===
+          driverObject[driver2][discriminantProp] &&
         !driverObject[driver1].isDupe &&
         !driverObject[driver2].isDupe
       ) {

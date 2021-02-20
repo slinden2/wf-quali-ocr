@@ -11,7 +11,7 @@ const createImageArea = async (
   await sharp(inputPath)
     .toColorspace("b-w")
     .extract({ width, height, top, left })
-    .resize({ width: width * 4 })
+    .resize({ width: width * 5 })
     .toFile(outputPath);
 };
 
