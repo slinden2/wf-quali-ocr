@@ -1,16 +1,21 @@
 # wf-quali-ocr
 
-This is a script that facilitates organizing qualifying sessions in [Wreckfest](https://order.wreckfestgame.com/). Qualifying is not official in the game but there are various communities that organize race events that require qualifying.
+This is a script that facilitates organizing community events in [Wreckfest](https://order.wreckfestgame.com/). Community events are not officially supported in the game but there are various communities that organize racing events themselves. Events may consist of many races that are sometimes with a separate qualifying part. Handling of the race results is a tedious task usually done by writing lap times and position manually from the result screenshots.
 
-Usually this happens so that at the start of an event there is a race of, for example, 5 laps and the driver with the fastest lap time wins the qualification. The result screen of the game is organized in finishing order, so the data from the game must be extracted elsewhere (Excel...) to be sorted out manually. This is a tedious process and requires writing lap times in a spreadsheet in MM:SS:sss format by hand.
-
-This script aims to facilitate that process and uses OCR (_Optical Character Recognition_) to extract the necessary data from the screenshots and outputs the data in a `.txt` file for later elaboration.
+This program aims to facilitate that part by providing tools for extracting qualifying results or race results from the screenshots using OCR (_Optical Character Recognition_) and outputing them into a `.txt` file for simpler further elaboration.
 
 # Requirements
 
 To run the script, you need to have [Node.js](https://nodejs.org/en/) installed on you computer. I developed this with the version `15.3.0`, but it should work with any version that supports `async/await` syntax (ie `>7.6`).
 
 The script uses a free API ([OCR.space(https://ocr.space/)]) for the OCR part, but an API key is required. You can get yourself one from [here](https://ocr.space/OCRAPI). You will have to give them your email and verify it the address. Then they will send the key to your inbox. Check **Installation** chapter below in the instruction for where to put the API key.
+
+---
+
+**Note**
+If you absolute do not want to deal with that, contact me on Discord and I can send you the compiled program. You still will need an API key, but you don't need to install Node.
+
+---
 
 # Instructions
 
@@ -26,13 +31,14 @@ The script uses a free API ([OCR.space(https://ocr.space/)]) for the OCR part, b
 
 ## Usage
 
-1. Before running the script, you need to have 1 or 2 screenshots in the `screenshots` folder. If the event has more than 16 drivers, the result screen becomes scrollable. You need a screenshot starting from the first position and another one starting from the last. The screenshot must be a **full screen** screenshot. Do not crop! By default Steam let's you take screenshots by fittin `F12`. **Currently only 1920x1080 screenshots are supported**.
+1. Before running the script, you need to have 1 or 2 screenshots in the `screenshots` folder. If the event has more than 16 drivers, the result screen becomes scrollable. You need a screenshot starting from the first position and another one starting from the last. The screenshot must be a **full screen** screenshot. Do not crop! By default Steam let's you take screenshots by hitting `F12`. **Currently only 1920x1080 screenshots are supported**.
 2. Delete any previous screenshots from the folder. The maximum amount of screenshots allowed is 2, so you can run the script only for one event at a time. In this repository there are already 2 example screenshots in the folder. Feel free to try the functionality with them.
 3. To run the script, just click the `run.bat` file in the script directory.
-4. `results.txt` gets created in the script directory.
-5. Open the file, copy the results and paste them where ever you please.
-6. ???
-7. Profit
+4. Select 1 for quali or 2 for race results. If you are extracting race results, be sure to fill in your point scheme in `points.txt`. First value is the position and second is the point amount separated by a space.
+5. `results.txt` gets created in the script directory.
+6. Open the file, copy the results and paste them where ever you please.
+7. ???
+8. Profit
 
 Please note that the images in the `output_directory` are removed automatically after the script is completed successfully. Be sure to leave the empty directory there anyway. It's is needed.
 
