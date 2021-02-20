@@ -4,7 +4,6 @@ const ocrSpace = require("ocr-space-api-wrapper");
 
 const createImageArea = require("../utils/createImageArea");
 const removeDuplicates = require("../utils/removeDuplicates");
-const { fstat } = require("fs");
 
 const generateRaceResults = async (
   screenshotDir,
@@ -88,7 +87,9 @@ const generateRaceResults = async (
   // Return sorted final results
   return finalArr.map((driver) => ({
     field1: driver.name,
-    field2: driver.points,
+    // This can be driver.points if points are needed in the output.
+    // Manteln needs only driver order
+    field2: "",
   }));
 };
 
