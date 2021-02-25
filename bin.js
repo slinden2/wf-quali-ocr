@@ -5,7 +5,7 @@ const readline = require("readline").createInterface({
 
 const main = require(".");
 
-console.log("1=quali 2=race");
+console.log("1=quali 2=race 3=race w/ points");
 readline.question("Please select one of the above options: ", (mode) => {
   console.log("Getting results...");
   main(mode)

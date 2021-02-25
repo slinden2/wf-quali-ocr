@@ -1,6 +1,6 @@
 @ECHO off
 TITLE WF-QUALI-OCR
-ECHO 1=quali 2=race
+ECHO 1=quali 2=race 3=race w/ quali
 SET /p choice= "Please select one of the above options: " 
 ECHO Getting results...
 node .\index.js %choice%

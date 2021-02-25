@@ -87,9 +87,7 @@ const generateRaceResults = async (
   // Return sorted final results
   return finalArr.map((driver) => ({
     field1: driver.name,
-    // This can be driver.points if points are needed in the output.
-    // Manteln needs only driver order
-    field2: "",
+    field2: driver.points,
   }));
 };
 

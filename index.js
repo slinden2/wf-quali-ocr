@@ -20,8 +20,8 @@ const OCR_OPTS = {
   scale: true,
 };
 
-// 1=quali 2=race
-const MODES = [1, 2];
+// 1=quali 2=race 3=race w/ points
+const MODES = [1, 2, 3];
 
 let mode = Number(process.argv[2]);
 
@@ -51,7 +51,7 @@ const main = async (modeArg) => {
     );
   }
 
-  if (mode === 2) {
+  if (mode === 2 || mode === 3) {
     results = await generateRaceResults(
       SCREENSHOT_DIR,
       OUTPUT_DIR,
@@ -65,7 +65,7 @@ const main = async (modeArg) => {
   }
 
   // Write to file
-  writeResults(results, RESULT_FILE);
+  writeResults(results, RESULT_FILE, mode);
 
   // Clear output_images
   clearOutputFiles(OUTPUT_DIR);
