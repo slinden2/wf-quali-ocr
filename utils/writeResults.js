@@ -1,4 +1,29 @@
 const fs = require("fs");
+const _ = require("lodash");
+
+const addEmptyRow = (resultFile) => {
+  // Add an empty row after the results
+  fs.appendFileSync(resultFile, "\n", (err) => {
+    if (err) {
+      return console.log(err);
+    }
+  });
+};
+
+const getServerMessages = (resultArray) => {
+  const driverChunks = _.chunk(resultArray, 4);
+
+  let posCount = 1;
+  const msgArray = driverChunks.map((chunk) => {
+    let msg = "/message ";
+    chunk.forEach((drv) => {
+      msg = msg.concat(`${posCount}: ${drv.field1} | `);
+      posCount++;
+    });
+    return msg.slice(0, msg.length - 3).concat("\n");
+  });
+  return msgArray;
+};
 
 const writeResults = (resultArray, resultFile, mode) => {
   // Write to file
@@ -18,11 +43,22 @@ const writeResults = (resultArray, resultFile, mode) => {
   });
 
   // Add an empty row after the results
-  fs.appendFileSync(resultFile, "\n", (err) => {
-    if (err) {
-      return console.log(err);
-    }
-  });
+  addEmptyRow(resultFile);
+
+  if (mode === 1) {
+    // Write server messages
+    const messages = getServerMessages(resultArray);
+    messages.forEach((msg) => {
+      fs.appendFileSync(resultFile, msg, (err) => {
+        if (err) {
+          return console.log(err);
+        }
+      });
+    });
+
+    // Add an empty row after the results
+    addEmptyRow(resultFile);
+  }
 };
 
 module.exports = writeResults;
