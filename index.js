@@ -1,8 +1,6 @@
-const fs = require("fs");
-const path = require("path");
-
 const getApiKey = require("./utils/getApiKey");
 const generateQualiResults = require("./programs/generateQualiResults");
+const generateEventResults = require("./programs/generateEventResults");
 const writeResults = require("./utils/writeResults");
 const clearOutputFiles = require("./utils/clearOutputFiles");
 const generateRaceResults = require("./programs/generateRaceResults");
@@ -14,6 +12,7 @@ const SCREENSHOT_DIR = "screenshots";
 const BACKUP_DIR = "_old";
 const OUTPUT_DIR = "output_images";
 const RESULT_FILE = "results.txt";
+const RACE_RESULT_FILE = "event_results.txt";
 
 const screenshots = getScreenshots(SCREENSHOT_DIR);
 
@@ -24,8 +23,8 @@ const OCR_OPTS = {
   scale: true,
 };
 
-// 1=quali 2=race 3=race w/ points
-const MODES = [1, 2, 3];
+// 1=quali 2=race 3=race w/ points 4=event
+const MODES = [1, 2, 3, 4];
 
 let mode = Number(process.argv[2]);
 
@@ -63,6 +62,11 @@ const main = async (modeArg) => {
       OCR_OPTS,
       screenshots
     );
+  }
+
+  if (mode === 4) {
+    generateEventResults(RESULT_FILE, RACE_RESULT_FILE);
+    return;
   }
 
   if (!results || !Array.isArray(results)) {

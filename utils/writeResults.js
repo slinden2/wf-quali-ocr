@@ -1,9 +1,9 @@
 const fs = require("fs");
 const _ = require("lodash");
 
-const addEmptyRow = (resultFile) => {
+const addRow = (resultFile, content) => {
   // Add an empty row after the results
-  fs.appendFileSync(resultFile, "\n", (err) => {
+  fs.appendFileSync(resultFile, content, (err) => {
     if (err) {
       return console.log(err);
     }
@@ -43,7 +43,7 @@ const writeResults = (resultArray, resultFile, mode) => {
   });
 
   // Add an empty row after the results
-  addEmptyRow(resultFile);
+  addRow(resultFile, "\n");
 
   if (mode === 1) {
     // Write server messages
@@ -57,7 +57,12 @@ const writeResults = (resultArray, resultFile, mode) => {
     });
 
     // Add an empty row after the results
-    addEmptyRow(resultFile);
+    addRow(resultFile, "\n");
+  }
+
+  if (mode === 2 || mode === 3) {
+    // Add an empty row after the results to make separation between races
+    addRow(resultFile, "=====\n\n");
   }
 };
 
