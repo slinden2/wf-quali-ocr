@@ -1,9 +1,9 @@
 const path = require("path");
-const fs = require("fs");
 const ocrSpace = require("ocr-space-api-wrapper");
 
 const createImageArea = require("../utils/createImageArea");
 const removeDuplicates = require("../utils/removeDuplicates");
+const getPointsObject = require("../utils/getPointsObject");
 
 const generateRaceResults = async (
   screenshotDir,
@@ -54,14 +54,7 @@ const generateRaceResults = async (
   const driverObjectWithoutDuplicates = removeDuplicates(driverObject, "pos");
 
   // Get points object
-  const points = fs
-    .readFileSync("points.txt", "utf8")
-    .split("\r\n")
-    .map((row) => row.split(" "))
-    .reduce((acc, cur) => {
-      acc[cur[0]] = cur[1];
-      return acc;
-    }, {});
+  const points = getPointsObject();
 
   // Add points to driver object
   for (const driver in driverObjectWithoutDuplicates) {
