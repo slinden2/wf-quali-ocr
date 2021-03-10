@@ -1,7 +1,7 @@
 node_modules/
 .vscode/
 /testFiles
-results.txt
+results*.txt
 output_images/*
 !output_images/.keep
 api_key.txt

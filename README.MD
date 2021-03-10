@@ -35,8 +35,16 @@ If you absolute do not want to deal with that, contact me on Discord and I can s
 2. Delete any previous screenshots from the folder. The maximum amount of screenshots allowed is 2, so you can run the script only for one event at a time. In this repository there are already 2 example screenshots in the folder. Feel free to try the functionality with them.
 3. To run the script, just click the `run.bat` file in the script directory.
 4. Select 1 for quali or 2 for race results. If you are extracting race results, be sure to fill in your point scheme in `points.txt`. First value is the position and second is the point amount separated by a space.
-5. `results.txt` gets created in the script directory.
-6. Open the file, copy the results and paste them where ever you please.
+5. Select the program you want to run:
+   1. 1=quali: Generates qualification results and server commands with ordered grid. 4 grid positions per message.
+   2. 2=race: Generates race results in order
+   3. 3=race w/ points: Generates race results with points. One row per driver correctly ordered with driver name and respective points. You must have a `points.txt` file containing you point scheme in place. In `points.txt`, the first value is the position and the second is the point amount separated by a space. Please see the example file in this repo.
+   4. 4=event: Generates the final standings sheet of the event based on the data in `results.txt`. Can be used for all events with or without qualification. The output is saved in `event_results.txt` file. The drivers are ordered by the total points. **The race results must be generated with points for this to work**. The precise format of the file is:
+      - If `results.txt` contains qualification+race results:
+        - name q1 r1 q2 r2 ... q5 r5 p
+      - If `results.txt` contains only race results: - name r1 r2 ... r5 p
+        The number of qualifications and races depends on how many of them the are in the `results.txt` file. It is not limited.
+6. Open the result file, copy the results and paste them where ever you please.
 7. ???
 8. Profit
 

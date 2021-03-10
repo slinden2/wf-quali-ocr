@@ -1,6 +1,21 @@
 const fs = require("fs");
 
+const addRow = require("../utils/addRow");
 const stringSimilarity = require("../utils/stringSimilarity");
+
+const getKey = (inputObj, referenceKey) => {
+  const definedKeys = Object.keys(inputObj);
+  let key = definedKeys.find((key) => key === referenceKey);
+  if (!key) {
+    definedKeys.forEach((k) => {
+      const similarity = stringSimilarity(k, referenceKey);
+      if (similarity > 0.5) {
+        key = k;
+      }
+    });
+  }
+  return key;
+};
 
 const generateRaceResults = async (resultFile, eventResultFile) => {
   // Get results from results file.
@@ -16,8 +31,10 @@ const generateRaceResults = async (resultFile, eventResultFile) => {
             if (driver.includes("\t")) {
               const [name, par] = driver.split("\t");
               if (par.includes(":")) {
-                return name;
+                // return only name for quali rows
+                return [name];
               } else {
+                // return an array of name and points for race results
                 return [name, Number(par)];
               }
             }
@@ -31,33 +48,30 @@ const generateRaceResults = async (resultFile, eventResultFile) => {
   const resObj = {};
   rawResArrays.forEach((event, raceNum) => {
     resObj[raceNum] = {};
-    event.forEach((partResults, phaseNum) => {
-      if (phaseNum === 0) {
-        // quali
-        partResults.forEach((driver, i) => {
-          if (!resObj[raceNum][driver]) resObj[raceNum][driver] = {};
-          resObj[raceNum][driver].quali = i + 1;
-        });
-      } else {
-        // race
-        partResults.forEach((driver, i) => {
-          // driver is in [driverName, points] format
-          const definedKeys = Object.keys(resObj[raceNum]);
-          let key = definedKeys.find((key) => key === driver[0]);
-          if (!key) {
-            definedKeys.forEach((k) => {
-              const similarity = stringSimilarity(k, driver[0]);
-              if (similarity > 0.5) {
-                key = k;
-              }
-            });
-          }
-          if (key) {
-            resObj[raceNum][key].race = i + 1;
-            resObj[raceNum][key].points = driver[1];
-          }
-        });
-      }
+    event.forEach((partResults) => {
+      partResults.forEach((driver, i) => {
+        // check if driver key is in resObj and if not, initialize it
+        let key = getKey(resObj[raceNum], driver[0]);
+        if (!key) {
+          resObj[raceNum][driver[0]] = {};
+          key = driver[0];
+        }
+
+        if (driver.length === 1) {
+          // quali
+          // driver is in ["name"] format
+          resObj[raceNum][driver[0]].quali = i + 1;
+        } else if (driver.length === 2) {
+          // race
+          // driver is in ["name", "points"] format
+          resObj[raceNum][key].race = i + 1;
+          resObj[raceNum][key].points = driver[1];
+        } else {
+          throw new Error(
+            `Error in comining quali and race results. Incorrect driver.length: ${driver.length}`
+          );
+        }
+      });
     });
   });
 
@@ -69,19 +83,8 @@ const generateRaceResults = async (resultFile, eventResultFile) => {
 
   // Group events by driver
   const final = resArr.reduce((acc, cur, i) => {
-    const definedKeys = Object.keys(acc);
     Object.entries(cur).map(([key, res]) => {
-      let foundKey = definedKeys.find((k) => k === key);
-
-      if (!foundKey) {
-        definedKeys.forEach((k) => {
-          const similarity = stringSimilarity(k, key);
-
-          if (similarity > 0.5) {
-            foundKey = k;
-          }
-        });
-      }
+      const foundKey = getKey(acc, key);
 
       if (foundKey) {
         acc[foundKey].push(res);
@@ -95,7 +98,7 @@ const generateRaceResults = async (resultFile, eventResultFile) => {
   }, {});
 
   // Count total points and sort
-  const finalResulArr = Object.entries(final)
+  const finalResultArr = Object.entries(final)
     .map((res) => {
       const driverPoints = res[1].reduce((acc, cur) => {
         acc += cur.points;
@@ -106,12 +109,12 @@ const generateRaceResults = async (resultFile, eventResultFile) => {
     .sort((a, b) => b[4] - a[4]);
 
   // Prepare driver string and write them in the result file
-  finalResulArr.forEach((driver) => {
+  finalResultArr.forEach((driver) => {
     const name = driver.splice(0, 1)[0];
     const points = driver.splice(driver.length - 1)[0];
     const results = driver
       .map((race) => {
-        return `${race.quali}\t${race.race}`;
+        return race.quali ? `${race.quali}\t${race.race}` : race.race;
       })
       .join("\t");
 
@@ -125,6 +128,7 @@ const generateRaceResults = async (resultFile, eventResultFile) => {
       }
     );
   });
+  addRow(eventResultFile, "\n");
 };
 
 module.exports = generateRaceResults;

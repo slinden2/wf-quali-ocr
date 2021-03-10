@@ -1,14 +1,7 @@
 const fs = require("fs");
 const _ = require("lodash");
 
-const addRow = (resultFile, content) => {
-  // Add an empty row after the results
-  fs.appendFileSync(resultFile, content, (err) => {
-    if (err) {
-      return console.log(err);
-    }
-  });
-};
+const addRow = require("./addRow");
 
 const getServerMessages = (resultArray) => {
   const driverChunks = _.chunk(resultArray, 4);
