@@ -9,7 +9,7 @@ const getKey = (inputObj, referenceKey) => {
   if (!key) {
     definedKeys.forEach((k) => {
       const similarity = stringSimilarity(k, referenceKey);
-      if (similarity > 0.5) {
+      if (similarity > 0.65) {
         key = k;
       }
     });
@@ -27,7 +27,7 @@ const generateRaceResults = async (resultFile, eventResultFile) => {
         .split("\n\n")
         .filter((e) => e.length && !e.startsWith("/message"))
         .map((e) => {
-          return e.split("\n").map((driver, i) => {
+          return e.split("\n").map((driver) => {
             if (driver.includes("\t")) {
               const [name, par] = driver.split("\t");
               if (par.includes(":")) {
