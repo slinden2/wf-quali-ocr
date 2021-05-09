@@ -6,5 +6,7 @@ output_images/*
 !output_images/.keep
 api_key.txt
 event_results.txt
+player_list.txt
+notes.txt
 /build
 /screenshots/**

@@ -6,6 +6,7 @@ const clearOutputFiles = require("./utils/clearOutputFiles");
 const generateRaceResults = require("./programs/generateRaceResults");
 const clearScreenshots = require("./utils/clearScreenshots");
 const getScreenshots = require("./utils/getScreenshots");
+const generatePlayerList = require("./programs/generatePlayerList");
 
 const OCR_API_KEY = getApiKey();
 const SCREENSHOT_DIR = "screenshots";
@@ -13,6 +14,7 @@ const BACKUP_DIR = "_old";
 const OUTPUT_DIR = "output_images";
 const RESULT_FILE = "results.txt";
 const RACE_RESULT_FILE = "event_results.txt";
+const PLAYER_LIST_FILE = "player_list.txt";
 
 const screenshots = getScreenshots(SCREENSHOT_DIR);
 
@@ -24,7 +26,7 @@ const OCR_OPTS = {
 };
 
 // 1=quali 2=race 3=race w/ points 4=event
-const MODES = [1, 2, 3, 4];
+const MODES = [1, 2, 3, 4, 5];
 
 let mode = Number(process.argv[2]);
 
@@ -69,6 +71,11 @@ const main = async (modeArg) => {
     return;
   }
 
+  if (mode === 5) {
+    await generatePlayerList(PLAYER_LIST_FILE);
+    return;
+  }
+
   if (!results || !Array.isArray(results)) {
     throw new Error("Something went wrong. No results array available.");
   }
@@ -84,10 +91,12 @@ const main = async (modeArg) => {
 };
 
 if (require.main === module) {
-  main().catch((err) => {
-    console.log(err);
-    process.exit(1);
-  });
+  main()
+    .catch((err) => {
+      console.log(err);
+      process.exit(1);
+    })
+    .finally(() => process.exit(0));
 }
 
 module.exports = main;
