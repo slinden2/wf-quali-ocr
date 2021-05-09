@@ -4,12 +4,14 @@ const ocrSpace = require("ocr-space-api-wrapper");
 const createImageArea = require("../utils/createImageArea");
 const convertMMSSsssToS = require("../utils/convertMMSSsssToS");
 const removeDuplicates = require("../utils/removeDuplicates");
+const getCorrectPlayerObject = require("../utils/getCorrectedPlayerObject");
 
 const generateQualiResults = async (
   screenshotDir,
   outputDir,
   ocrOpts,
-  screenshots
+  screenshots,
+  playerListFile
 ) => {
   // Contains results from the API
   const resArray = [];
@@ -45,6 +47,7 @@ const generateQualiResults = async (
   // Combine page1 and page2 results.
   // Add seconds for sorting
   const driverObject = { ...resArray[0], ...resArray[1] };
+
   for (const i in driverObject) {
     driverObject[i] = {
       timeStr: driverObject[i],
@@ -58,10 +61,16 @@ const generateQualiResults = async (
     "timeStr"
   );
 
+  // Compare keys to fetched (program 5) results and use program 5 result keys.
+  const correctedDriverObject = getCorrectPlayerObject(
+    driverObjectWithoutDuplicates,
+    playerListFile
+  );
+
   // Divide objects into an array so that they can be sorted
   const driverArr = [];
-  for (const i in driverObjectWithoutDuplicates) {
-    driverArr.push({ name: i, ...driverObjectWithoutDuplicates[i] });
+  for (const i in correctedDriverObject) {
+    driverArr.push({ name: i, ...correctedDriverObject[i] });
   }
 
   // Sort by secs

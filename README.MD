@@ -69,3 +69,7 @@ You need to add also an `api_key.txt` file in the `build` folder. Without it the
 Also create `screenshots` and `output_images` folders in the `build` directory. Now, if you have screenshots in the `screenshots` folder, you can run the script by double clicking `wf-quali-ocr.exe`.
 
 That `build` folder you could now move to a different PC and run it without Node or other dependencies installed. They are already bundled in the `.exe`.
+
+## TODO
+
+Now that player list program is there, the string similarity functionality in the program 4 may not be needed anymore, as there should be no differences in driver names in quali and race results.

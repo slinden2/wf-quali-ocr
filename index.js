@@ -53,7 +53,8 @@ const main = async (modeArg) => {
       SCREENSHOT_DIR,
       OUTPUT_DIR,
       OCR_OPTS,
-      screenshots
+      screenshots,
+      PLAYER_LIST_FILE
     );
   }
 
@@ -62,7 +63,8 @@ const main = async (modeArg) => {
       SCREENSHOT_DIR,
       OUTPUT_DIR,
       OCR_OPTS,
-      screenshots
+      screenshots,
+      PLAYER_LIST_FILE
     );
   }
 
