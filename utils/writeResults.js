@@ -10,7 +10,7 @@ const getServerMessages = (resultArray) => {
   const msgArray = driverChunks.map((chunk) => {
     let msg = "/message ";
     chunk.forEach((drv) => {
-      msg = msg.concat(`${posCount}: ${drv.field1} | `);
+      msg = msg.concat(`${posCount}: ${drv[0]} | `);
       posCount++;
     });
     return msg.slice(0, msg.length - 3).concat("\n");
@@ -21,12 +21,7 @@ const getServerMessages = (resultArray) => {
 const writeResults = (resultArray, resultFile, mode) => {
   // Write to file
   resultArray.forEach((result) => {
-    // Modes 1 and 3 have two fields, but mode 2 only one
-    const row =
-      mode === 2
-        ? `${result.field1}\n`
-        : `${result.field1}\t${result.field2}\n`;
-    process.stdout.write(row);
+    const row = result.join("\t").concat("\n");
 
     fs.appendFileSync(resultFile, row, (err) => {
       if (err) {
@@ -53,10 +48,8 @@ const writeResults = (resultArray, resultFile, mode) => {
     addRow(resultFile, "\n");
   }
 
-  if (mode === 2 || mode === 3) {
-    // Add an empty row after the results to make separation between races
-    addRow(resultFile, "=====\n\n");
-  }
+  // Add an empty row after the results to make separation between races
+  addRow(resultFile, "=====\n\n");
 };
 
 module.exports = writeResults;

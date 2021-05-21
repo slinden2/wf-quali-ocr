@@ -86,10 +86,7 @@ const generateRaceResults = async (
   const finalArr = [...driverArr].sort((a, b) => a.pos - b.pos);
 
   // Return sorted final results
-  return finalArr.map((driver) => ({
-    field1: driver.name,
-    field2: driver.points,
-  }));
+  return finalArr.map((driver) => [driver.name, driver.points]);
 };
 
 module.exports = generateRaceResults;

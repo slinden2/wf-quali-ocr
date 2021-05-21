@@ -11,7 +11,8 @@ const generateQualiResults = async (
   outputDir,
   ocrOpts,
   screenshots,
-  playerListFile
+  playerListFile,
+  isRx
 ) => {
   // Contains results from the API
   const resArray = [];
@@ -21,11 +22,19 @@ const generateQualiResults = async (
     const _driverOutput = path.join(outputDir, `drivers_${sh}`);
     const _timesOutput = path.join(outputDir, `times_${sh}`);
 
+    const driverNameAreaReg = [250, 715, 260, 763];
+    const bestLapAreaReg = [130, 715, 260, 1530];
+    const driverNameAreaRx = [250, 175, 260, 763];
+    const totalTimeAreaRx = [130, 175, 260, 1420];
+
+    const nameArea = isRx ? driverNameAreaRx : driverNameAreaReg;
+    const timeArea = isRx ? totalTimeAreaRx : bestLapAreaReg;
+
     // Extract driver names into new image
-    await createImageArea(inputPath, _driverOutput, 250, 715, 260, 763);
+    await createImageArea(inputPath, _driverOutput, ...nameArea);
 
     // Extract lap times into new image
-    await createImageArea(inputPath, _timesOutput, 130, 715, 260, 1530);
+    await createImageArea(inputPath, _timesOutput, ...timeArea);
 
     const resDrivers = await ocrSpace(_driverOutput, ocrOpts);
     const resTimes = await ocrSpace(_timesOutput, ocrOpts);
@@ -44,10 +53,12 @@ const generateQualiResults = async (
     resArray.push(driverTimes);
   }
 
-  // Combine page1 and page2 results.
-  // Add seconds for sorting
-  const driverObject = { ...resArray[0], ...resArray[1] };
+  // Combine results from different screenshots.
+  const driverObject = resArray.reduce((acc, cur) => {
+    return { ...acc, ...cur };
+  }, {});
 
+  // Add seconds for sorting
   for (const i in driverObject) {
     driverObject[i] = {
       timeStr: driverObject[i],
@@ -74,13 +85,16 @@ const generateQualiResults = async (
   }
 
   // Sort by secs
-  const finalArr = [...driverArr].sort((a, b) => a.secs - b.secs);
+  const finalArr = [...driverArr]
+    .sort((a, b) => a.secs - b.secs)
+    .map((driver) => [driver.name, driver.timeStr]);
 
-  // Return sorted final results
-  return finalArr.map((driver) => ({
-    field1: driver.name,
-    field2: driver.timeStr,
-  }));
+  // Remove DNF's before return
+  // This is for Rallycross. If a driver ping timeouts it would consider a host
+  // on the 4th position in the screenshot. In regular quali there is no DNF
+  // as DNF is shown in total time column instead of best lap
+
+  return finalArr.filter((driver) => driver[1] !== "DNF");
 };
 
 module.exports = generateQualiResults;
