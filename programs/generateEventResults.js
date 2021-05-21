@@ -1,23 +1,9 @@
 const fs = require("fs");
 
+const getKey = require("../utils/getKey");
 const addRow = require("../utils/addRow");
-const stringSimilarity = require("../utils/stringSimilarity");
 
-const getKey = (inputObj, referenceKey) => {
-  const definedKeys = Object.keys(inputObj);
-  let key = definedKeys.find((key) => key === referenceKey);
-  if (!key) {
-    definedKeys.forEach((k) => {
-      const similarity = stringSimilarity(k, referenceKey);
-      if (similarity > 0.65) {
-        key = k;
-      }
-    });
-  }
-  return key;
-};
-
-const generateRaceResults = async (resultFile, eventResultFile) => {
+const generateRaceResults = (resultFile, eventResultFile) => {
   // Get results from results file.
   const rawResArrays = fs
     .readFileSync(resultFile, "utf-8")

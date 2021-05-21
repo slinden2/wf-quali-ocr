@@ -49,7 +49,10 @@ const writeResults = (resultArray, resultFile, mode) => {
   }
 
   // Add an empty row after the results to make separation between races
-  addRow(resultFile, "=====\n\n");
+  // Only needed in regular quali
+  if (mode !== 1) {
+    addRow(resultFile, "=====\n\n");
+  }
 };
 
 module.exports = writeResults;
