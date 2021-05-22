@@ -1,34 +1,22 @@
 const fs = require("fs");
 
+const getResultsFromFile = require("../utils/getResultsFromFile");
 const getKey = require("../utils/getKey");
 const addRow = require("../utils/addRow");
 
 const generateRaceResults = (resultFile, eventResultFile) => {
-  // Get results from results file.
-  const rawResArrays = fs
-    .readFileSync(resultFile, "utf-8")
-    .split("=====")
-    .map((race) =>
-      race
-        .split("\n\n")
-        .filter((e) => e.length && !e.startsWith("/message"))
-        .map((e) => {
-          return e.split("\n").map((driver) => {
-            if (driver.includes("\t")) {
-              const [name, par] = driver.split("\t");
-              if (par.includes(":")) {
-                // return only name for quali rows
-                return [name];
-              } else {
-                // return an array of name and points for race results
-                return [name, Number(par)];
-              }
-            }
-            return driver;
-          });
-        })
-    )
-    .filter((event) => event.length);
+  const fileData = getResultsFromFile(resultFile);
+
+  // Format data tbe compatible with this program
+  const rawResArrays = fileData.map((race) => {
+    const qualiArr = [];
+    const raceArr = [];
+    race.forEach((record) => {
+      if (record[1].includes(":")) qualiArr.push([record[0]]);
+      else raceArr.push([record[0], Number(record[1])]);
+    });
+    return [qualiArr, raceArr];
+  });
 
   // Combine quali and race results
   const resObj = {};
