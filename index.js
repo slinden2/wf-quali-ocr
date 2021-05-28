@@ -32,17 +32,23 @@ const MODES = [1, 2, 3, 4, 5, 6, 7];
 
 let mode = Number(process.argv[2]);
 
+const screenshotLimitRegular = mode === 1 || mode === 2 || mode === 3;
+const screenshotLimitRx = mode === 6;
+
 // Check that screenshots folder contains max 2 screenshots (excl rallycross)
-if (mode !== 6 && screenshots.length > 2) {
+if (screenshotLimitRegular && screenshots.length > 2) {
   throw new Error(
     "More than 2 screenshots found. Please clean up the screenshots folder."
   );
 }
 
-// Check that screenshots folder contains 5 screenshots (only rallycross)
-if (mode === 6 && screenshots.length !== 5) {
+// Check that screenshots folder contains 4 or 5 screenshots (only rallycross)
+if (
+  screenshotLimitRx &&
+  (screenshots.length === 4 || screenshots.length === 5)
+) {
   throw new Error(
-    "Screenshots folder must contain 5 screenshots of rallycross results"
+    "Screenshots folder must contain 4 or 5 screenshots of rallycross results"
   );
 }
 
