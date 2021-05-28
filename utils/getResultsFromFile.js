@@ -9,6 +9,7 @@ const getResultsFromFile = (resultFile) => {
         .split("\n")
         .filter((row) => row.length && !row.startsWith("/message"))
         .map((driver) => driver.split("\t"))
+        .filter((driver) => driver[0] !== "=====")
     )
     .filter((event) => event.length);
 };
