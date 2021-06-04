@@ -24,8 +24,8 @@ const generateQualiResults = async (
 
     const driverNameAreaReg = [250, 715, 260, 763];
     const bestLapAreaReg = [130, 715, 260, 1530];
-    const driverNameAreaRx = [250, 175, 260, 763];
-    const totalTimeAreaRx = [130, 175, 260, 1420];
+    const driverNameAreaRx = [250, 220, 260, 763];
+    const totalTimeAreaRx = [130, 220, 260, 1420];
 
     const nameArea = isRx ? driverNameAreaRx : driverNameAreaReg;
     const timeArea = isRx ? totalTimeAreaRx : bestLapAreaReg;

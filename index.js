@@ -45,7 +45,7 @@ if (screenshotLimitRegular && screenshots.length > 2) {
 // Check that screenshots folder contains 4 or 5 screenshots (only rallycross)
 if (
   screenshotLimitRx &&
-  (screenshots.length === 4 || screenshots.length === 5)
+  (!screenshots.length === 4 || !screenshots.length === 5)
 ) {
   throw new Error(
     "Screenshots folder must contain 4 or 5 screenshots of rallycross results"
