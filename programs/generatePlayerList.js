@@ -2,15 +2,14 @@ const fs = require("fs");
 
 const SteamServer = require("./generatePlayerList/SteamServer");
 
-let wreckfestServer = new SteamServer("194.147.120.78", 29137); // Manteln event
+let wreckfestServer = new SteamServer("194.147.120.82", 29137); // Manteln event
 
-const generatePlayerList = async (fileName) => {
-  await wreckfestServer.init();
+const cycle = async (fileName) => {
   await wreckfestServer.requestInfo();
   await wreckfestServer.requestPlayer();
 
   if (!wreckfestServer.playersList) {
-    generatePlayerList();
+    cycle();
     return;
   }
 
@@ -28,6 +27,11 @@ const generatePlayerList = async (fileName) => {
       }
     });
   });
+};
+
+const generatePlayerList = async (fileName) => {
+  await wreckfestServer.init();
+  await cycle(fileName);
 };
 
 module.exports = generatePlayerList;

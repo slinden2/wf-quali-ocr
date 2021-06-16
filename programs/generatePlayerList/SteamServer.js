@@ -123,7 +123,7 @@ class SteamServer {
         console.log("error: ", err);
         reject(err);
       });
-      this.client.bind(30001);
+      this.client.bind(30000);
     });
   }
 
@@ -163,7 +163,9 @@ class SteamServer {
       this.HOST,
       function (err, bytes) {
         if (err) throw err;
-        //console.log('UDP request message sent to ' + this.HOST +':'+ this.PORT);
+        // console.log(
+        //   "UDP request message sent to " + this.HOST + ":" + this.PORT
+        // );
       }.bind(this)
     );
   }
