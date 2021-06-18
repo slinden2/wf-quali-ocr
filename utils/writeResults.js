@@ -33,9 +33,11 @@ const writeResults = (resultArray, resultFile, mode) => {
   // Add an empty row after the results
   addRow(resultFile, "\n");
 
-  if (mode === 1) {
+  if (mode === 1 || mode === 8) {
     // Write server messages
-    const messages = getServerMessages(resultArray);
+    const messages = getServerMessages(
+      mode === 8 ? [...resultArray].reverse() : resultArray
+    );
     messages.forEach((msg) => {
       fs.appendFileSync(resultFile, msg, (err) => {
         if (err) {

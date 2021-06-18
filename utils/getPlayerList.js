@@ -1,8 +1,13 @@
 const fs = require("fs");
 
 const getPlayerList = (fileName) => {
-  const list = fs.readFileSync(fileName, "utf8");
-  return list.split("\n");
+  if (fs.existsSync(fileName)) {
+    const raw = fs.readFileSync(fileName, "utf8");
+    const list = raw.split("\r\n").join("\n");
+    return list.split("\n").filter((name) => name);
+  } else {
+    return [];
+  }
 };
 
 module.exports = getPlayerList;

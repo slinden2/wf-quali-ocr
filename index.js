@@ -27,8 +27,30 @@ const OCR_OPTS = {
   scale: true,
 };
 
-// 1=quali 2=race 3=race w/ points 4=event 5=player list 6=rx quali 7=rx event
-const MODES = [1, 2, 3, 4, 5, 6, 7];
+/* 
+MODES
+  1:    Qualification. Gets results from the screenshots sorted by best lap and writes them
+        in the result file. Writes also the server message commands to form the grid.
+  2:    Race. Gets results from the screenshots in the order they are in. Writes the
+        driver names in the results file in their finishig order.
+  3:    Race w/ points. Just like 2, but writes also the points by position found
+        in the points file for each driver.
+  4:    Event. Calculates the complete event results based on the data found in the results file.
+  5:    Player List. Fetches the list of players from the event server and saves them into
+        player list file. This file is needed for fixing errors caused by the OCR software
+        when reading data from the screenshots.
+  6:    Rallycross Qualification. Gets rallycross results from the screenshots 1 heat at a time.
+        Considers first 5 names in the screenshots to be drivers. If there are 20 participants,
+        you would have 4 screenshots in the screenshot folder before running the program.
+        Then you would repeat the process for all 4 heats. The results are saved in the
+        rallycross results file.
+  7:    Rallycross Event. Calculates rallycross total event results based on whats in
+        rallycross results file and saves them in rallycross event results file.
+  8:    Reverse Grid. Like races with points, but writes also the server messages
+        for grid formations in the results file. In reversed order based on the results
+        of the previous race.
+*/
+const MODES = [1, 2, 3, 4, 5, 6, 7, 8];
 
 let mode = Number(process.argv[2]);
 
@@ -73,7 +95,7 @@ const main = async (modeArg) => {
     );
   }
 
-  if (mode === 2 || mode === 3) {
+  if (mode === 2 || mode === 3 || mode === 8) {
     results = await generateRaceResults(
       SCREENSHOT_DIR,
       OUTPUT_DIR,
