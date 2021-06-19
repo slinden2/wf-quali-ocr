@@ -6,7 +6,7 @@ const readline = require("readline").createInterface({
 const main = require(".");
 
 console.log(
-  "1=quali 2=race 3=race w/ points 4=event 5=player list 6=rx quali 7=rx event"
+  "1=quali 2=race 3=race w/ points 4=event 5=player list 6=rx quali 7=rx event 8=reverse grid"
 );
 readline.question("Please select one of the above options: ", (mode) => {
   console.log("Getting results...");
